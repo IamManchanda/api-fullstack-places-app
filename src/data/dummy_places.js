@@ -1,8 +1,6 @@
-const uuidv4 = require("uuid/v4");
-
 const DUMMY_PLACES = [
   {
-    id: uuidv4(),
+    id: "p1",
     image:
       "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
     title: "Empire State Building",

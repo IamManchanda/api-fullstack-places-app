@@ -4,30 +4,6 @@ const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-error");
 let DUMMY_PLACES = require("../data/dummy_places");
 
-/* CREATE */
-const createPlace = (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return next(
-      new HttpError(
-        "Invalid Inputs passed, please check the form data you passed.",
-        422,
-      ),
-    );
-  }
-  const { title, description, address, creator, location } = req.body;
-  const place = {
-    id: uuidv4(),
-    title,
-    description,
-    address,
-    creator,
-    location,
-  };
-  DUMMY_PLACES.push(place);
-  res.status(201).json({ place });
-};
-
 /* READ */
 const readAllPlaces = (req, res, next) => {
   const places = DUMMY_PLACES;
@@ -59,8 +35,42 @@ const readAllPlacesByUserId = (req, res, next) => {
   res.status(200).json({ places });
 };
 
+/* CREATE */
+const createPlace = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError(
+        "Invalid Inputs passed, please check the form data you passed.",
+        422,
+      ),
+    );
+  }
+  const { title, description, address, creator, location } = req.body;
+  const place = {
+    id: uuidv4(),
+    title,
+    description,
+    address,
+    creator,
+    location,
+  };
+  DUMMY_PLACES.push(place);
+  res.status(201).json({ place });
+};
+
 /* UPDATE */
 const updateCurrentPlaceByPlaceId = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return next(
+      new HttpError(
+        "Invalid Inputs passed, please check the form data you passed.",
+        422,
+      ),
+    );
+  }
+
   const { title, description } = req.body;
   const { placeId } = req.params;
   const place = { ...DUMMY_PLACES.find(p => p.id === placeId) };
