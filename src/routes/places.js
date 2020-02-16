@@ -4,7 +4,7 @@ const {
   createPlace,
   readAllPlaces,
   readCurrentPlaceByPlaceId,
-  readCurrentPlaceByUserId,
+  readAllPlacesByUserId,
   updateCurrentPlaceByPlaceId,
   deleteCurrentPlaceByPlaceId,
 } = require("../controllers/places");
@@ -12,7 +12,7 @@ const {
 const placesRoutes = express.Router();
 placesRoutes.get("/", readAllPlaces);
 placesRoutes.get("/:placeId", readCurrentPlaceByPlaceId);
-placesRoutes.get("/user/:userId", readCurrentPlaceByUserId);
+placesRoutes.get("/user/:userId", readAllPlacesByUserId);
 placesRoutes.post("/", createPlace);
 placesRoutes.patch("/:placeId", updateCurrentPlaceByPlaceId);
 placesRoutes.delete("/:placeId", deleteCurrentPlaceByPlaceId);

@@ -22,7 +22,7 @@ const createPlace = (req, res, next) => {
 /* READ */
 const readAllPlaces = (req, res, next) => {
   const places = DUMMY_PLACES;
-  if (!places) {
+  if (!places || places.length === 0) {
     return next(new HttpError("Could not find any places.", 404));
   }
   res.status(200).json({ places });
@@ -39,15 +39,15 @@ const readCurrentPlaceByPlaceId = (req, res, next) => {
   res.status(200).json({ place });
 };
 
-const readCurrentPlaceByUserId = (req, res, next) => {
+const readAllPlacesByUserId = (req, res, next) => {
   const { userId } = req.params;
-  const place = DUMMY_PLACES.find(p => p.creator === userId);
-  if (!place) {
+  const places = DUMMY_PLACES.filter(p => p.creator === userId);
+  if (!places || places.length === 0) {
     return next(
       new HttpError("Could not find a place for the provided userId.", 404),
     );
   }
-  res.status(200).json({ place });
+  res.status(200).json({ places });
 };
 
 /* UPDATE */
@@ -76,6 +76,6 @@ const deleteCurrentPlaceByPlaceId = (req, res, next) => {
 exports.createPlace = createPlace;
 exports.readAllPlaces = readAllPlaces;
 exports.readCurrentPlaceByPlaceId = readCurrentPlaceByPlaceId;
-exports.readCurrentPlaceByUserId = readCurrentPlaceByUserId;
+exports.readAllPlacesByUserId = readAllPlacesByUserId;
 exports.updateCurrentPlaceByPlaceId = updateCurrentPlaceByPlaceId;
 exports.deleteCurrentPlaceByPlaceId = deleteCurrentPlaceByPlaceId;
