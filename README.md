@@ -9,3 +9,11 @@
 ## POST Requests
 
 - `/api/places`
+
+## PATCH Requests
+
+- `/api/places/:placeId`
+
+## DELETE Requests
+
+- `/api/places/:placeId`
