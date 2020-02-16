@@ -1,4 +1,5 @@
 const uuidv4 = require("uuid/v4");
+
 const HttpError = require("../models/http-error");
 let DUMMY_PLACES = require("../data/dummy_places");
 
@@ -65,7 +66,7 @@ const updateCurrentPlaceByPlaceId = (req, res, next) => {
 };
 
 /* DELETE */
-const deleteCurrentPlaceByPlaceId = (req, res, next) => {
+const deleteByPlaceId = (req, res, next) => {
   const { placeId } = req.params;
   DUMMY_PLACES = DUMMY_PLACES.filter(p => p.id !== placeId);
   res.status(204).json({
@@ -78,4 +79,4 @@ exports.readAllPlaces = readAllPlaces;
 exports.readCurrentPlaceByPlaceId = readCurrentPlaceByPlaceId;
 exports.readAllPlacesByUserId = readAllPlacesByUserId;
 exports.updateCurrentPlaceByPlaceId = updateCurrentPlaceByPlaceId;
-exports.deleteCurrentPlaceByPlaceId = deleteCurrentPlaceByPlaceId;
+exports.deleteByPlaceId = deleteByPlaceId;
