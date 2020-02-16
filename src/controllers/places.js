@@ -1,7 +1,8 @@
 const HttpError = require("../models/http-error");
 const DUMMY_PLACES = require("../data/dummy_places");
 
-const getAllPlaces = (req, res, next) => {
+/* Read */
+const readAllPlaces = (req, res, next) => {
   const places = DUMMY_PLACES;
   if (!places) {
     return next(new HttpError("Could not find any places.", 404));
@@ -9,7 +10,7 @@ const getAllPlaces = (req, res, next) => {
   res.json({ places });
 };
 
-const getCurrentPlaceByPlaceId = (req, res, next) => {
+const readCurrentPlaceByPlaceId = (req, res, next) => {
   const { placeId } = req.params;
   const place = DUMMY_PLACES.find(p => p.id === placeId);
   if (!place) {
@@ -20,7 +21,7 @@ const getCurrentPlaceByPlaceId = (req, res, next) => {
   res.json({ place });
 };
 
-const getCurrentPlaceByUserId = (req, res, next) => {
+const readCurrentPlaceByUserId = (req, res, next) => {
   const { userId } = req.params;
   const place = DUMMY_PLACES.find(p => p.creator === userId);
   if (!place) {
@@ -31,6 +32,6 @@ const getCurrentPlaceByUserId = (req, res, next) => {
   res.json({ place });
 };
 
-exports.getAllPlaces = getAllPlaces;
-exports.getCurrentPlaceByPlaceId = getCurrentPlaceByPlaceId;
-exports.getCurrentPlaceByUserId = getCurrentPlaceByUserId;
+exports.readAllPlaces = readAllPlaces;
+exports.readCurrentPlaceByPlaceId = readCurrentPlaceByPlaceId;
+exports.readCurrentPlaceByUserId = readCurrentPlaceByUserId;

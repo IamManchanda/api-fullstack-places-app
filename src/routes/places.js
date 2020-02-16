@@ -1,14 +1,14 @@
 const express = require("express");
 
 const {
-  getAllPlaces,
-  getCurrentPlaceByPlaceId,
-  getCurrentPlaceByUserId,
+  readAllPlaces,
+  readCurrentPlaceByPlaceId,
+  readCurrentPlaceByUserId,
 } = require("../controllers/places");
 
 const placesRoutes = express.Router();
-placesRoutes.get("/", getAllPlaces);
-placesRoutes.get("/:placeId", getCurrentPlaceByPlaceId);
-placesRoutes.get("/user/:userId", getCurrentPlaceByUserId);
+placesRoutes.get("/", readAllPlaces);
+placesRoutes.get("/:placeId", readCurrentPlaceByPlaceId);
+placesRoutes.get("/user/:userId", readCurrentPlaceByUserId);
 
 module.exports = placesRoutes;
