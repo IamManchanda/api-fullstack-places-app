@@ -7,10 +7,10 @@ const HttpError = require("./models/http-error");
 const app = express();
 app.use(bodyParser.json());
 app.use("/api/places", placesRoutes);
-app.use(function errorOnBadRequest(req, res, next) {
+app.use(function errorHandlerForBadRequest(req, res, next) {
   throw new HttpError("Could not find this route.", 404);
 });
-app.use(function errorOnHandleableRequest(error, req, res, next) {
+app.use(function errorHandlerForRoutableRequest(error, req, res, next) {
   if (res.headerSent) {
     return next(error);
   }
