@@ -13,13 +13,12 @@ const readAllUsers = (req, res, next) => {
 
 const signupUser = (req, res, next) => {
   const { name, email, password } = req.body;
-  const createdUser = {
+  const user = {
     id: uuidv4(),
     name,
     email,
     password,
   };
-  const user = { ...createdUser };
   DUMMY_USERS.push(user);
   res.status(201).json({ user });
 };

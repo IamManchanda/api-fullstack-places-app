@@ -6,7 +6,7 @@ let DUMMY_PLACES = require("../data/dummy_places");
 /* CREATE */
 const createPlace = (req, res, next) => {
   const { title, description, address, creator, location } = req.body;
-  const createdPlace = {
+  const place = {
     id: uuidv4(),
     title,
     description,
@@ -14,8 +14,6 @@ const createPlace = (req, res, next) => {
     creator,
     location,
   };
-
-  const place = { ...createdPlace };
   DUMMY_PLACES.push(place);
   res.status(201).json({ place });
 };
@@ -55,12 +53,11 @@ const readAllPlacesByUserId = (req, res, next) => {
 const updateCurrentPlaceByPlaceId = (req, res, next) => {
   const { title, description } = req.body;
   const { placeId } = req.params;
-  const updatedPlace = { ...DUMMY_PLACES.find(p => p.id === placeId) };
+  const place = { ...DUMMY_PLACES.find(p => p.id === placeId) };
   const placeIndex = DUMMY_PLACES.findIndex(p => p.id === placeId);
-  updatedPlace.title = title;
-  updatedPlace.description = description;
+  place.title = title;
+  place.description = description;
 
-  const place = { ...updatedPlace };
   DUMMY_PLACES[placeIndex] = place;
   res.status(200).json({ place });
 };
