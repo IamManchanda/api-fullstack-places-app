@@ -3,5 +3,6 @@ const bodyParser = require("body-parser");
 const placesRoutes = require("./routes/places");
 
 const app = express();
-app.use(placesRoutes);
+app.use("/api/places", placesRoutes);
 app.listen(5000);
+console.log("Server listening on port 5000");
