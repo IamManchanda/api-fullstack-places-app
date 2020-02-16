@@ -5,7 +5,7 @@ const DUMMY_PLACES = require("./dummy_data/dummy_places");
 
 const placesRoutes = express.Router();
 
-placesRoutes.get("/", function placesHomeRoute(req, res, next) {
+placesRoutes.get("/", function allPlacesRoute(req, res, next) {
   const places = DUMMY_PLACES;
   if (!places) {
     return next(new HttpError("Could not find any places.", 404));
@@ -13,7 +13,7 @@ placesRoutes.get("/", function placesHomeRoute(req, res, next) {
   res.json({ places });
 });
 
-placesRoutes.get("/:placeId", function placesHomeRoute(req, res, next) {
+placesRoutes.get("/:placeId", function placeByPlaceIdRoute(req, res, next) {
   const { placeId } = req.params;
   const place = DUMMY_PLACES.find(p => p.id === placeId);
   if (!place) {
@@ -24,7 +24,7 @@ placesRoutes.get("/:placeId", function placesHomeRoute(req, res, next) {
   res.json({ place });
 });
 
-placesRoutes.get("/user/:userId", function placesHomeRoute(req, res, next) {
+placesRoutes.get("/user/:userId", function placeByUserIdRoute(req, res, next) {
   const { userId } = req.params;
   const place = DUMMY_PLACES.find(p => p.creator === userId);
   if (!place) {
