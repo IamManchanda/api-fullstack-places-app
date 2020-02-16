@@ -5,3 +5,7 @@
 - `/api/places`
 - `/api/places/:placeId`
 - `/api/places/user/:userId`
+
+## POST Requests
+
+- `/api/places`

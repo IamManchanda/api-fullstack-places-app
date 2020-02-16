@@ -1,5 +1,14 @@
+const uuidv4 = require("uuid/v4");
 const HttpError = require("../models/http-error");
 const DUMMY_PLACES = require("../data/dummy_places");
+
+/* Create */
+const createPlace = (req, res, next) => {
+  const { title, description, address, creator, location } = req.body;
+  const place = { title, description, address, creator, location };
+  DUMMY_PLACES.push({ id: uuidv4(), ...place });
+  res.status(201).json({ place });
+};
 
 /* Read */
 const readAllPlaces = (req, res, next) => {
@@ -32,6 +41,7 @@ const readCurrentPlaceByUserId = (req, res, next) => {
   res.json({ place });
 };
 
+exports.createPlace = createPlace;
 exports.readAllPlaces = readAllPlaces;
 exports.readCurrentPlaceByPlaceId = readCurrentPlaceByPlaceId;
 exports.readCurrentPlaceByUserId = readCurrentPlaceByUserId;
