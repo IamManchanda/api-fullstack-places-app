@@ -25,7 +25,7 @@ const readAllPlaces = (req, res, next) => {
   if (!places) {
     return next(new HttpError("Could not find any places.", 404));
   }
-  res.json({ places });
+  res.status(200).json({ places });
 };
 
 const readCurrentPlaceByPlaceId = (req, res, next) => {
@@ -36,7 +36,7 @@ const readCurrentPlaceByPlaceId = (req, res, next) => {
       new HttpError("Could not find a place for the provided placeId.", 404),
     );
   }
-  res.json({ place });
+  res.status(200).json({ place });
 };
 
 const readCurrentPlaceByUserId = (req, res, next) => {
@@ -47,7 +47,7 @@ const readCurrentPlaceByUserId = (req, res, next) => {
       new HttpError("Could not find a place for the provided userId.", 404),
     );
   }
-  res.json({ place });
+  res.status(200).json({ place });
 };
 
 /* UPDATE */
