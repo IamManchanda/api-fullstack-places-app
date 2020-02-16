@@ -22,7 +22,6 @@ const signupUser = (req, res, next) => {
       ),
     );
   }
-
   const { name, email, password } = req.body;
   const hasUser = DUMMY_USERS.find(u => u.email === email);
   if (hasUser) {
