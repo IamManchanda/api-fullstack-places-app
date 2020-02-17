@@ -2,6 +2,7 @@ const uuidv4 = require("uuid/v4");
 const { validationResult } = require("express-validator");
 
 const HttpError = require("../models/http-error");
+const readLocationFromAddress = require("../util/location");
 let DUMMY_PLACES = require("../data/dummy_places");
 
 /* READ */
@@ -36,7 +37,7 @@ const readAllPlacesByUserId = (req, res, next) => {
 };
 
 /* CREATE */
-const createPlace = (req, res, next) => {
+const createPlace = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(
@@ -46,17 +47,22 @@ const createPlace = (req, res, next) => {
       ),
     );
   }
-  const { title, description, address, creator, location } = req.body;
-  const place = {
-    id: uuidv4(),
-    title,
-    description,
-    address,
-    creator,
-    location,
-  };
-  DUMMY_PLACES.push(place);
-  res.status(201).json({ place });
+  const { title, description, address, creator } = req.body;
+  try {
+    const location = await readLocationFromAddress(address);
+    const place = {
+      id: uuidv4(),
+      title,
+      description,
+      address,
+      creator,
+      location,
+    };
+    DUMMY_PLACES.push(place);
+    res.status(201).json({ place });
+  } catch (error) {
+    return next(error);
+  }
 };
 
 /* UPDATE */
