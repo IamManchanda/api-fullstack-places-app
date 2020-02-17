@@ -2,13 +2,16 @@
 
 ## GET Requests
 
-- `/api/places`
+- `/api/places/`
 - `/api/places/:placeId`
 - `/api/places/user/:userId`
+- `/api/users/`
 
 ## POST Requests
 
-- `/api/places`
+- `/api/places/`
+- `/api/users/signup`
+- `/api/users/login`
 
 ## PATCH Requests
 
