@@ -1,9 +1,15 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const { connect } = require("mongoose");
 
 const placesRoutes = require("./routes/places");
 const usersRoutes = require("./routes/users");
 const HttpError = require("./models/http-error");
+
+const {
+  MONGO_DB_FULLSTACK_MERN_APP_USERNAME,
+  MONGO_DB_FULLSTACK_MERN_APP_PASSWORD,
+} = process.env;
 
 const app = express();
 app.use(bodyParser.json());
@@ -19,5 +25,17 @@ app.use(function errorHandlerForRoutableRequest(error, req, res, next) {
   res.status(error.code || 500);
   res.json({ message: error.message || "An unknown error occurred." });
 });
-app.listen(5000);
-console.log("Server listening on port 5000");
+
+const uri = `mongodb+srv://${MONGO_DB_FULLSTACK_MERN_APP_USERNAME}:${MONGO_DB_FULLSTACK_MERN_APP_PASSWORD}@db-fullstack-mern-app-cluster-000-vhudb.mongodb.net/places?retryWrites=true&w=majority`;
+
+connect(uri, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(function startWebServer() {
+    app.listen(5000);
+    console.log("Server listening on port 5000");
+  })
+  .catch(function errorHandlerForBadWebServerStart(error) {
+    console.log(error);
+  });
