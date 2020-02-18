@@ -1,8 +1,10 @@
 const { validationResult } = require("express-validator");
+const { startSession } = require("mongoose");
 
 const HttpError = require("../models/http-error");
-const Place = require("../models/place");
 const readLocationFromAddress = require("../utils/location");
+const Place = require("../models/place");
+const User = require("../models/user");
 
 /* READ */
 const readAllPlaces = async (req, res, next) => {
@@ -86,13 +88,22 @@ const createPlace = async (req, res, next) => {
     title,
     description,
     address,
-    creator,
     location,
+    creator,
     image:
       "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
   });
   try {
-    await place.save();
+    const user = await User.findById(creator);
+    if (!user) {
+      return next(new HttpError("Could not find user for provided id", 500));
+    }
+    const session = await startSession();
+    session.startTransaction();
+    await place.save({ session });
+    user.places.push(place);
+    await user.save({ session });
+    await session.commitTransaction();
     res.status(201).json({ place: place.toObject({ getters: true }) });
   } catch (error) {
     return next(new HttpError("Creating Place failed, please try again", 500));
