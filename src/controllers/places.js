@@ -77,32 +77,32 @@ const createPlace = async (req, res, next) => {
     );
   }
   const { title, description, address, creator } = req.body;
+  let location;
   try {
-    const location = await readLocationFromAddress(address);
-    const place = new Place({
-      title,
-      description,
-      address,
-      creator,
-      location,
-      image:
-        "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
-    });
-    try {
-      await place.save();
-      res.status(201).json({ place: place.toObject({ getters: true }) });
-    } catch (error) {
-      return next(
-        new HttpError("Creating Place failed, please try again", 500),
-      );
-    }
+    location = await readLocationFromAddress(address);
   } catch (error) {
     return next(error);
+  }
+
+  const place = new Place({
+    title,
+    description,
+    address,
+    creator,
+    location,
+    image:
+      "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
+  });
+  try {
+    await place.save();
+    res.status(201).json({ place: place.toObject({ getters: true }) });
+  } catch (error) {
+    return next(new HttpError("Creating Place failed, please try again", 500));
   }
 };
 
 /* UPDATE */
-const updateCurrentPlaceByPlaceId = (req, res, next) => {
+const updateCurrentPlaceByPlaceId = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(
@@ -115,13 +115,18 @@ const updateCurrentPlaceByPlaceId = (req, res, next) => {
 
   const { title, description } = req.body;
   const { placeId } = req.params;
-  const place = { ...DUMMY_PLACES.find(p => p.id === placeId) };
-  const placeIndex = DUMMY_PLACES.findIndex(p => p.id === placeId);
-  place.title = title;
-  place.description = description;
 
-  DUMMY_PLACES[placeIndex] = place;
-  res.status(200).json({ place });
+  try {
+    const place = await Place.findById(placeId);
+    place.title = title;
+    place.description = description;
+    await place.save();
+    res.status(200).json({ place: place.toObject({ getters: true }) });
+  } catch (error) {
+    return next(
+      new HttpError("Something went wrong, could not update place.", 500),
+    );
+  }
 };
 
 /* DELETE */
