@@ -46,15 +46,16 @@ const readCurrentPlaceByPlaceId = async (req, res, next) => {
 const readAllPlacesByUserId = async (req, res, next) => {
   const { userId } = req.params;
   try {
-    const places = await Place.find({ creator: userId });
-    if (!places || places.length === 0) {
+    const userWithPlaces = await User.findById(userId).populate("places");
+    if (!userWithPlaces || userWithPlaces.length === 0) {
       return next(
         new HttpError("Could not find a place for the provided userId", 404),
       );
     }
-    res
-      .status(200)
-      .json({ places: places.map(place => place.toObject({ getters: true })) });
+    const { places } = userWithPlaces;
+    res.status(200).json({
+      places: places.map(place => place.toObject({ getters: true })),
+    });
   } catch (error) {
     return next(
       new HttpError(
