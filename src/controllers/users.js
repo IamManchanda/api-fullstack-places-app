@@ -4,12 +4,17 @@ const HttpError = require("../models/http-error");
 const User = require("../models/user");
 let DUMMY_USERS = require("../data/dummy_users");
 
-const readAllUsers = (req, res, next) => {
-  const users = DUMMY_USERS;
-  if (!users || users.length === 0) {
-    return next(new HttpError("Could not find any users.", 404));
+const readAllUsers = async (req, res, next) => {
+  try {
+    const users = await User.find({}, "-password");
+    res
+      .status(200)
+      .json({ users: users.map(user => user.toObject({ getters: true })) });
+  } catch (error) {
+    return next(
+      new HttpError("Fetching users failed, please try again later.", 500),
+    );
   }
-  res.status(200).json({ users });
 };
 
 const signupUser = async (req, res, next) => {
