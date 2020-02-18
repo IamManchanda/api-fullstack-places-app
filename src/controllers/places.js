@@ -127,6 +127,11 @@ const updateCurrentPlaceByPlaceId = async (req, res, next) => {
 
   try {
     const place = await Place.findById(placeId);
+    if (!place) {
+      return next(
+        new HttpError("Could not find a place for the provided placeId.", 404),
+      );
+    }
     place.title = title;
     place.description = description;
     await place.save();
@@ -142,8 +147,20 @@ const updateCurrentPlaceByPlaceId = async (req, res, next) => {
 const deleteByPlaceId = async (req, res, next) => {
   const { placeId } = req.params;
   try {
-    const place = await Place.findById(placeId);
-    await place.remove();
+    const place = await Place.findById(placeId).populate("creator");
+
+    if (!place) {
+      return next(
+        new HttpError("Could not find a place for the provided placeId.", 404),
+      );
+    }
+
+    const session = await startSession();
+    session.startTransaction();
+    await place.remove({ session });
+    place.creator.places.pull(place);
+    await place.creator.save({ session });
+    await session.commitTransaction();
     res.status(200).json({
       message: `Deleted place for placeId ${placeId}`,
     });
