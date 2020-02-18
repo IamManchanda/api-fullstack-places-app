@@ -1,6 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { connect } = require("mongoose");
+const { connect, set } = require("mongoose");
 
 const placesRoutes = require("./routes/places");
 const usersRoutes = require("./routes/users");
@@ -39,3 +39,4 @@ connect(uri, {
   .catch(function errorHandlerForBadWebServerStart(error) {
     console.log(error);
   });
+set("useCreateIndex", true);
