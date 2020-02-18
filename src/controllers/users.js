@@ -2,6 +2,7 @@ const uuidv4 = require("uuid/v4");
 const { validationResult } = require("express-validator");
 
 const HttpError = require("../models/http-error");
+const User = require("../models/user");
 let DUMMY_USERS = require("../data/dummy_users");
 
 const readAllUsers = (req, res, next) => {
@@ -12,7 +13,7 @@ const readAllUsers = (req, res, next) => {
   res.status(200).json({ users });
 };
 
-const signupUser = (req, res, next) => {
+const signupUser = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return next(
@@ -22,35 +23,47 @@ const signupUser = (req, res, next) => {
       ),
     );
   }
-  const { name, email, password } = req.body;
-  const hasUser = DUMMY_USERS.find(u => u.email === email);
-  if (hasUser) {
+  const { name, email, password, places } = req.body;
+  try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return next(
+        new HttpError("User already exists, Please login instead.", 422),
+      );
+    }
+    const user = new User({
+      name,
+      email,
+      password,
+      image:
+        "https://pbs.twimg.com/profile_images/1229678138906402816/pRc5M5-N_400x400.jpg",
+      places,
+    });
+    await user.save();
+    res.status(201).json({ user: user.toObject({ getters: true }) });
+  } catch (error) {
     return next(
-      new HttpError("Could not create user, email already exists.", 422),
+      new HttpError("Signing up failed, please try again later.", 500),
     );
   }
-  const user = {
-    id: uuidv4(),
-    name,
-    email,
-    password,
-  };
-  DUMMY_USERS.push(user);
-  res.status(201).json({ user });
 };
 
-const loginUser = (req, res, next) => {
+const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
-  const user = DUMMY_USERS.find(u => u.email === email);
-  if (!user || user.password !== password) {
+
+  try {
+    const existingUser = await User.findOne({ email });
+    if (!existingUser || existingUser.password !== password) {
+      return next(
+        new HttpError("Invalid Credentials, could not log you in.", 401),
+      );
+    }
+    res.status(200).json({ message: "Logged in successfully" });
+  } catch (error) {
     return next(
-      new HttpError(
-        "Could not identify user, credentials seems to be incorrect.",
-        401,
-      ),
+      new HttpError("Logging in failed, please try again later.", 500),
     );
   }
-  res.status(200).json({ message: "Logged in successfully" });
 };
 
 exports.readAllUsers = readAllUsers;
