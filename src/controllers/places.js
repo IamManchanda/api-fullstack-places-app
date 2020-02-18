@@ -4,7 +4,6 @@ const { validationResult } = require("express-validator");
 const HttpError = require("../models/http-error");
 const Place = require("../models/place");
 const readLocationFromAddress = require("../utils/location");
-let DUMMY_PLACES = require("../data/dummy_places");
 
 /* READ */
 const readAllPlaces = async (req, res, next) => {
