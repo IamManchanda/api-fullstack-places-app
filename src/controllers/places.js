@@ -51,14 +51,6 @@ const createPlace = async (req, res, next) => {
   const { title, description, address, creator } = req.body;
   try {
     const location = await readLocationFromAddress(address);
-    /* const place = {
-      id: uuidv4(),
-      title,
-      description,
-      address,
-      creator,
-      location,
-    }; */
     const place = new Place({
       title,
       description,

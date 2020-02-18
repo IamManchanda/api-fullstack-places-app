@@ -7,9 +7,9 @@ const usersRoutes = require("./routes/users");
 const HttpError = require("./models/http-error");
 
 const {
-  MONGO_DB_FULLSTACK_MERN_APP_CLUSTER,
-  MONGO_DB_FULLSTACK_MERN_APP_USERNAME,
-  MONGO_DB_FULLSTACK_MERN_APP_PASSWORD,
+  MONGO_DB_FULLSTACK_MERN_APP_CLUSTER: CLUSTER,
+  MONGO_DB_FULLSTACK_MERN_APP_USERNAME: USERNAME,
+  MONGO_DB_FULLSTACK_MERN_APP_PASSWORD: PASSWORD,
 } = process.env;
 
 const app = express();
@@ -27,8 +27,7 @@ app.use(function errorHandlerForRoutableRequest(error, req, res, next) {
   res.json({ message: error.message || "An unknown error occurred." });
 });
 
-const uri = `mongodb+srv://${MONGO_DB_FULLSTACK_MERN_APP_USERNAME}:${MONGO_DB_FULLSTACK_MERN_APP_PASSWORD}@${MONGO_DB_FULLSTACK_MERN_APP_CLUSTER}-vhudb.mongodb.net/places?retryWrites=true&w=majority`;
-
+const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@${CLUSTER}-vhudb.mongodb.net/places?retryWrites=true&w=majority`;
 connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
