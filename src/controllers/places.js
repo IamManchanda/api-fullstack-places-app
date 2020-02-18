@@ -1,4 +1,3 @@
-const uuidv4 = require("uuid/v4");
 const { validationResult } = require("express-validator");
 
 const HttpError = require("../models/http-error");
