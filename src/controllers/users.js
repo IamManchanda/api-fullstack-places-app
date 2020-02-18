@@ -29,7 +29,7 @@ const signupUser = async (req, res, next) => {
       ),
     );
   }
-  const { name, email, password, places } = req.body;
+  const { name, email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -43,7 +43,7 @@ const signupUser = async (req, res, next) => {
       password,
       image:
         "https://pbs.twimg.com/profile_images/1229678138906402816/pRc5M5-N_400x400.jpg",
-      places,
+      places: [],
     });
     await user.save();
     res.status(201).json({ user: user.toObject({ getters: true }) });
