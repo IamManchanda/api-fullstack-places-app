@@ -3,7 +3,7 @@ const { validationResult } = require("express-validator");
 
 const HttpError = require("../models/http-error");
 const Place = require("../models/place");
-const readLocationFromAddress = require("../util/location");
+const readLocationFromAddress = require("../utils/location");
 let DUMMY_PLACES = require("../data/dummy_places");
 
 /* READ */
