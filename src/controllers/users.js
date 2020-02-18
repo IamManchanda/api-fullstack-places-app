@@ -6,6 +6,9 @@ const User = require("../models/user");
 const readAllUsers = async (req, res, next) => {
   try {
     const users = await User.find({}, "-password");
+    if (!users || users.length === 0) {
+      return next(new HttpError("Could not find any users.", 404));
+    }
     res
       .status(200)
       .json({ users: users.map(user => user.toObject({ getters: true })) });
