@@ -11,7 +11,7 @@ const readAllUsers = async (req, res, next) => {
     }
     res
       .status(200)
-      .json({ users: users.map(user => user.toObject({ getters: true })) });
+      .json({ users: users.map((user) => user.toObject({ getters: true })) });
   } catch (error) {
     return next(
       new HttpError("Fetching users failed, please try again later.", 500),
@@ -42,7 +42,7 @@ const signupUser = async (req, res, next) => {
       email,
       password,
       image:
-        "https://pbs.twimg.com/profile_images/1229678138906402816/pRc5M5-N_400x400.jpg",
+        "https://pbs.twimg.com/profile_images/1268476960914591744/lK_oDRwH_400x400.jpg",
       places: [],
     });
     await user.save();
@@ -64,7 +64,10 @@ const loginUser = async (req, res, next) => {
         new HttpError("Invalid Credentials, could not log you in.", 401),
       );
     }
-    res.status(200).json({ message: "Logged in successfully" });
+    res.status(200).json({
+      message: "Logged in successfully",
+      user: existingUser.toObject({ getters: true }),
+    });
   } catch (error) {
     return next(
       new HttpError("Logging in failed, please try again later.", 500),
