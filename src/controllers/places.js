@@ -1,3 +1,4 @@
+const fs = require("fs");
 const { validationResult } = require("express-validator");
 const { startSession } = require("mongoose");
 
@@ -155,12 +156,17 @@ const deleteByPlaceId = async (req, res, next) => {
       );
     }
 
+    const imagePath = place.image;
+
     const session = await startSession();
     session.startTransaction();
     await place.remove({ session });
     place.creator.places.pull(place);
     await place.creator.save({ session });
     await session.commitTransaction();
+    fs.unlink(imagePath, function errorHandlerForFileUnlinkOnPlaceDelete(err) {
+      console.log(err);
+    });
     res.status(200).json({
       message: `Deleted place for placeId ${placeId}`,
     });
