@@ -41,8 +41,7 @@ const signupUser = async (req, res, next) => {
       name,
       email,
       password,
-      image:
-        "https://pbs.twimg.com/profile_images/1268476960914591744/lK_oDRwH_400x400.jpg",
+      image: req.file.path,
       places: [],
     });
     await user.save();
