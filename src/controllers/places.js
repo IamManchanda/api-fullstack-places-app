@@ -13,9 +13,9 @@ const readAllPlaces = async (req, res, next) => {
     if (!places || places.length === 0) {
       return next(new HttpError("Could not find any places.", 404));
     }
-    res
-      .status(200)
-      .json({ places: places.map(place => place.toObject({ getters: true })) });
+    res.status(200).json({
+      places: places.map((place) => place.toObject({ getters: true })),
+    });
   } catch (error) {
     return next(
       new HttpError(
@@ -54,7 +54,7 @@ const readAllPlacesByUserId = async (req, res, next) => {
     }
     const { places } = userWithPlaces;
     res.status(200).json({
-      places: places.map(place => place.toObject({ getters: true })),
+      places: places.map((place) => place.toObject({ getters: true })),
     });
   } catch (error) {
     return next(
@@ -91,8 +91,7 @@ const createPlace = async (req, res, next) => {
     address,
     location,
     creator,
-    image:
-      "https://untappedcities.com/wp-content/uploads/2015/07/Flatiron-Building-Secrets-Roof-Basement-Elevator-Sonny-Atis-GFP-NYC_5.jpg",
+    image: req.file.path,
   });
   try {
     const user = await User.findById(creator);
