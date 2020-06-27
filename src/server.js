@@ -1,4 +1,5 @@
 const fs = require("fs");
+const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const { connect, set } = require("mongoose");
@@ -15,6 +16,7 @@ const {
 
 const app = express();
 app.use(bodyParser.json());
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 app.use(function corsHandler(req, res, next) {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
