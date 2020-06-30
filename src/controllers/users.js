@@ -80,14 +80,14 @@ const loginUser = async (req, res, next) => {
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
       return next(
-        new HttpError("Invalid Credentials, could not log you in.", 401),
+        new HttpError("Invalid Credentials, could not log you in.", 403),
       );
     }
     let isValidPassword = false;
     isValidPassword = await bcrypt.compare(password, existingUser.password);
     if (!isValidPassword) {
       return next(
-        new HttpError("Invalid Credentials, could not log you in.", 401),
+        new HttpError("Invalid Credentials, could not log you in.", 403),
       );
     }
     let token;

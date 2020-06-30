@@ -20,7 +20,7 @@ const checkAuth = (req, res, next) => {
     next();
   } catch (error) {
     return next(
-      new HttpError("Authentication failed, please try again later.", 401),
+      new HttpError("Authentication failed, please try again later.", 403),
     );
   }
 };
