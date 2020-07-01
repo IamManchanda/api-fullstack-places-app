@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 
 const HttpError = require("../models/http-error");
 
-const secretKey = "supersecret_dont_share";
+const secretKey = process.env.NODE_APP_JSON_WEB_TOKENS_KEY;
 
 const checkAuth = (req, res, next) => {
   if (req.method === "OPTIONS") {

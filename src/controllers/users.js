@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
 
-const secretKey = "supersecret_dont_share";
+const secretKey = process.env.NODE_APP_JSON_WEB_TOKENS_KEY;
 
 const readAllUsers = async (req, res, next) => {
   try {

@@ -12,6 +12,7 @@ const {
   MONGO_DB_FULLSTACK_MERN_APP_CLUSTER: CLUSTER,
   MONGO_DB_FULLSTACK_MERN_APP_USERNAME: USERNAME,
   MONGO_DB_FULLSTACK_MERN_APP_PASSWORD: PASSWORD,
+  MONGO_DB_FULLSTACK_MERN_APP_DB_NAME: DB_NAME,
 } = process.env;
 
 const app = express();
@@ -44,7 +45,7 @@ app.use(function errorHandlerForRoutableRequest(error, req, res, next) {
   res.json({ message: error.message || "An unknown error occurred." });
 });
 
-const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@${CLUSTER}-vhudb.mongodb.net/userWithPlaces?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@${CLUSTER}-vhudb.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
