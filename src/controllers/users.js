@@ -10,7 +10,7 @@ const secretKey = process.env.NODE_APP_JSON_WEB_TOKENS_KEY;
 const readAllUsers = async (req, res, next) => {
   try {
     const users = await User.find({}, "-password");
-    if (!users || users.length === 0) {
+    if (!users) {
       return next(new HttpError("Could not find any users.", 404));
     }
     res
