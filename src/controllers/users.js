@@ -1,7 +1,11 @@
 const { validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
+
+const secretKey = "supersecret_dont_share";
 
 const readAllUsers = async (req, res, next) => {
   try {
@@ -37,15 +41,32 @@ const signupUser = async (req, res, next) => {
         new HttpError("User already exists, Please login instead.", 422),
       );
     }
+    let hashedPassword;
+    hashedPassword = await bcrypt.hash(password, 12);
     const user = new User({
       name,
       email,
-      password,
+      password: hashedPassword,
       image: req.file.path,
       places: [],
     });
     await user.save();
-    res.status(201).json({ user: user.toObject({ getters: true }) });
+    let token;
+    token = jwt.sign(
+      {
+        userId: user.id,
+        email: user.email,
+      },
+      secretKey,
+      {
+        expiresIn: "1h",
+      },
+    );
+    res.status(201).json({
+      user: user.id,
+      email: user.email,
+      token,
+    });
   } catch (error) {
     return next(
       new HttpError("Signing up failed, please try again later.", 500),
@@ -55,17 +76,35 @@ const signupUser = async (req, res, next) => {
 
 const loginUser = async (req, res, next) => {
   const { email, password } = req.body;
-
   try {
     const existingUser = await User.findOne({ email });
-    if (!existingUser || existingUser.password !== password) {
+    if (!existingUser) {
       return next(
-        new HttpError("Invalid Credentials, could not log you in.", 401),
+        new HttpError("Invalid Credentials, could not log you in.", 403),
       );
     }
+    let isValidPassword = false;
+    isValidPassword = await bcrypt.compare(password, existingUser.password);
+    if (!isValidPassword) {
+      return next(
+        new HttpError("Invalid Credentials, could not log you in.", 403),
+      );
+    }
+    let token;
+    token = jwt.sign(
+      {
+        userId: existingUser.id,
+        email: existingUser.email,
+      },
+      secretKey,
+      {
+        expiresIn: "1h",
+      },
+    );
     res.status(200).json({
-      message: "Logged in successfully",
-      user: existingUser.toObject({ getters: true }),
+      userId: existingUser.id,
+      email: existingUser.email,
+      token,
     });
   } catch (error) {
     return next(

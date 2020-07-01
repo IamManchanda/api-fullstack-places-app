@@ -78,7 +78,7 @@ const createPlace = async (req, res, next) => {
       ),
     );
   }
-  const { title, description, address, creator } = req.body;
+  const { title, description, address } = req.body;
   let location;
   try {
     location = await readLocationFromAddress(address);
@@ -91,11 +91,11 @@ const createPlace = async (req, res, next) => {
     description,
     address,
     location,
-    creator,
+    creator: req.userData.userId,
     image: req.file.path,
   });
   try {
-    const user = await User.findById(creator);
+    const user = await User.findById(req.userData.userId);
     if (!user) {
       return next(new HttpError("Could not find user for provided id", 500));
     }
@@ -133,6 +133,11 @@ const updateCurrentPlaceByPlaceId = async (req, res, next) => {
         new HttpError("Could not find a place for the provided placeId.", 404),
       );
     }
+    if (place.creator.toString() !== req.userData.userId) {
+      return next(
+        new HttpError("You are not authorized to edit this place.", 401),
+      );
+    }
     place.title = title;
     place.description = description;
     await place.save();
@@ -153,6 +158,12 @@ const deleteByPlaceId = async (req, res, next) => {
     if (!place) {
       return next(
         new HttpError("Could not find a place for the provided placeId.", 404),
+      );
+    }
+
+    if (place.creator.id !== req.userData.userId) {
+      return next(
+        new HttpError("You are not authorized to delete this place.", 401),
       );
     }
 

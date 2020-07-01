@@ -13,11 +13,13 @@ const {
   updateCurrentPlaceByPlaceIdValidation,
 } = require("../validators/places");
 const fileUpload = require("../middlewares/file-upload");
+const checkAuth = require("../middlewares/check-auth");
 
 const placesRoutes = express.Router();
 placesRoutes.get("/", readAllPlaces);
 placesRoutes.get("/:placeId", readCurrentPlaceByPlaceId);
 placesRoutes.get("/user/:userId", readAllPlacesByUserId);
+placesRoutes.use(checkAuth);
 placesRoutes.post(
   "/",
   fileUpload.single("image"),
