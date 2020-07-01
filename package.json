@@ -4,8 +4,8 @@
   "description": "API for Fullstack MERN App!",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon -r dotenv/config src/server.js",
-    "start": "node src/server.js"
+    "dev": "nodemon -r dotenv/config server.js",
+    "start": "node server.js"
   },
   "author": "IamManchanda",
   "license": "MIT",

@@ -4,9 +4,9 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { connect, set } = require("mongoose");
 
-const placesRoutes = require("./routes/places");
-const usersRoutes = require("./routes/users");
-const HttpError = require("./models/http-error");
+const placesRoutes = require("./src/routes/places");
+const usersRoutes = require("./src/routes/users");
+const HttpError = require("./src/models/http-error");
 
 const {
   MONGO_DB_FULLSTACK_MERN_APP_CLUSTER: CLUSTER,
