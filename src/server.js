@@ -45,7 +45,7 @@ app.use(function errorHandlerForRoutableRequest(error, req, res, next) {
   res.json({ message: error.message || "An unknown error occurred." });
 });
 
-const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@${CLUSTER}-vhudb.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${USERNAME}:${PASSWORD}@${CLUSTER}.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
