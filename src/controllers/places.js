@@ -92,7 +92,7 @@ const createPlace = async (req, res, next) => {
     address,
     location,
     creator: req.userData.userId,
-    image: req.file.path,
+    image: req.file.location,
   });
   try {
     const user = await User.findById(req.userData.userId);
