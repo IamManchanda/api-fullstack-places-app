@@ -45,7 +45,7 @@ connect(uri, {
 })
   .then(function startWebServer() {
     app.listen(process.env.PORT || 5000);
-    console.log("Server listening...");
+    console.log("API Server listening...");
   })
   .catch(function errorHandlerForBadWebServerStart(error) {
     console.log(error);
