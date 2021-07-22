@@ -1,7 +1,5 @@
 # API Fullstack MongoDB, Express, Node & React App
 
-Web Frontend Repository: https://github.com/IamManchanda/fullstack-mern-app
-
 ## GET Requests
 
 - `/api/places/`
